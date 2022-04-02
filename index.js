@@ -29,8 +29,6 @@ app.post("/api/users", (req, res) => {
           language: Joi.string().max(255).required(),
         }).validate({ ...req.body }, { abortEarly: false }).error;
         if (errorValidation) {
-          console.log(errorValidation);
-          //res.status(422).send("Data invalid");
           return Promise.reject("INVALID_DATA");
         }
         return db

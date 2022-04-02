@@ -1,7 +1,7 @@
 const db = require("../config/db_config");
 
 const findOneUser = (email) => {
-  let request = `SELECT * FROM users WHERE email = ${email}`;
+  let request = `SELECT * FROM users WHERE email = '${email}'`;
   return db
     .promise()
     .query(request)
