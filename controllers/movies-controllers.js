@@ -55,15 +55,32 @@ const deleteOneMovie = (req, res) => {
 };
 
 const updateOneMovie = (req, res) => {
+  const { title, director, year, color, duration } = req.body;
   const movieId = req.params.id;
   moviesModels
     .findOneMovie(movieId)
-    .then((result) => {
+    .then(([result]) => {
       if (!result[0]) return Promise.reject("FILM_NOT_FOUND");
-      else return moviesModels.updateMovie(movieId);
+      else
+        return moviesModels.updateMovie(
+          title,
+          director,
+          year,
+          color,
+          duration,
+          movieId
+        );
     })
-    .then(() => {
-      res.status(201).json()
+    .then((result) => {
+      res.status(201).json({ ...req.body });
+    })
+    .catch((error) => {
+      console.log(error);
+      if (error === "FILM_NOT_FOUND")
+        res.status(404).send(`Movie with id ${movieId} is not found.`);
+      else {
+        res.status(500).send("Error saving the movie on database.");
+      }
     });
 };
 
@@ -72,4 +89,5 @@ module.exports = {
   createMovies,
   getOneMovie,
   deleteOneMovie,
+  updateOneMovie,
 };

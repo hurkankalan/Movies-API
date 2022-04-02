@@ -51,8 +51,8 @@ const deleteMovie = (id) => {
     });
 };
 
-const updateMovie = (id) => {
-  let sqlRequest = `UPDATE movies SET ? WHERE id = ${id}`;
+const updateMovie = (title, director, year, color, duration, movieId) => {
+  let sqlRequest = `UPDATE movies SET title = '${title}', director = '${director}', year = '${year}', color = ${color}, duration = ${duration} WHERE id = ${movieId}`;
   return db
     .promise()
     .query(sqlRequest)

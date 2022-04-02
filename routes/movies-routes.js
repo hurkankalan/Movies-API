@@ -1,11 +1,13 @@
 const moviesControllers = require("../controllers/movies-controllers");
 const moviesRouter = require("express").Router();
 
+moviesRouter.get("/:id", moviesControllers.getOneMovie);
+
 moviesRouter.get("/", moviesControllers.filterMoviesByColorAndDuration);
 
 moviesRouter.post("/", moviesControllers.createMovies);
 
-moviesRouter.get("/:id", moviesControllers.getOneMovie);
+moviesRouter.put("/:id", moviesControllers.updateOneMovie);
 
 moviesRouter.delete("/:id", moviesControllers.deleteOneMovie);
 
