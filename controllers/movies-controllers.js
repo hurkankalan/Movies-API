@@ -1,4 +1,17 @@
 const moviesModels = require("../models/movies-models");
+const usersModels = require("../models/users-models");
+
+const AllMoviesCreatedByOneUser = async (req, res) => {
+  try {
+    const userId = await usersModels.decodeUserFromJWT(req.headers.cookie.slice(11)).userId;
+    console.log(userId);
+    const allMovies = await moviesModels.findAllMoviesCreatedByOneUser(userId);
+    res.status(200).send(allMovies);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving movies");
+  }
+};
 
 const filterMoviesByColorAndDuration = (req, res) => {
   const { color, max_duration } = req.query;
@@ -90,4 +103,5 @@ module.exports = {
   getOneMovie,
   deleteOneMovie,
   updateOneMovie,
+  AllMoviesCreatedByOneUser,
 };

@@ -5,6 +5,8 @@ moviesRouter.get("/:id", moviesControllers.getOneMovie);
 
 moviesRouter.get("/", moviesControllers.filterMoviesByColorAndDuration);
 
+moviesRouter.get("/user/:id", moviesControllers.AllMoviesCreatedByOneUser);
+
 moviesRouter.post("/", moviesControllers.createMovies);
 
 moviesRouter.put("/:id", moviesControllers.updateOneMovie);

@@ -1,5 +1,10 @@
 const db = require("../config/db_config");
 
+const findAllMoviesCreatedByOneUser = async (userId) => {
+  let sqlRequest = `SELECT * FROM movies WHERE user_id = ?`;
+  return await db.promise().query(sqlRequest, [userId]);
+};
+
 const findManyMovies = (color, max_duration) => {
   let sql = "SELECT * FROM movies ";
   let sqlValues = [];
@@ -67,4 +72,5 @@ module.exports = {
   findOneMovie,
   deleteMovie,
   updateMovie,
+  findAllMoviesCreatedByOneUser,
 };

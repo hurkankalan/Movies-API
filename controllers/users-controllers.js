@@ -1,6 +1,11 @@
 const usersModels = require("../models/users-models");
 const Joi = require("joi");
 
+/**
+ * Fonction qui crée un utilisateur
+ * @param {*} req le corps de la requete
+ * @param {*} res la réponse
+ */
 const createOneUser = async (req, res) => {
   const { firstname, lastname, email, password, city, language } = req.body;
   let errorData = null;
@@ -53,14 +58,18 @@ const createOneUser = async (req, res) => {
 const authControleUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const verifMailIsExisting = await usersModels.findOneUser(email);
-    if (verifMailIsExisting[0].length > 0) {
+    const user = await usersModels.findOneUser(email);
+    if (user[0].length > 0) {
       const hashedPassword = await usersModels.verifyPassword(
-        verifMailIsExisting[0][0].password,
+        user[0][0].password,
         password
       );
       if (hashedPassword) {
-        res.status(200).send("Authentification réussi avec succès !");
+        // res.send("Authentification réussi avec succès !");
+        const token = usersModels.calculateJwtToken(email, user[0][0].id);
+        res.cookie("user_token", token);
+        res.status(200).send();
+        // console.log(req.headers.cookie.slice(11))
       } else {
         res.status(401).send("Mot de passe incorrect");
       }
@@ -68,6 +77,7 @@ const authControleUser = async (req, res) => {
       res.status(401).send("Identifiant incorrect");
     }
   } catch (e) {
+    console.error(e);
     res
       .status(500)
       .send("Une erreur a été rencontré lors de l'authentification");
